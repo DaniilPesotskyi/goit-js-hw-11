@@ -1,0 +1,73 @@
+.search-form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  
+  padding-top: 30px;
+  padding-bottom: 30px;
+  background: radial-gradient(67.47% 24873.6% at 12.03% 59.5%, #CDD2FF 0%, rgba(207, 207, 207, 0) 100%);
+}
+
+.query-input {
+  width: 590px;
+  height: 40px;
+
+  padding-left: 15px;
+
+  border: 1px solid black;
+  border-radius: 15px;
+
+  font-size: 17px;
+  line-height: 21px;
+
+  outline: none;
+
+  transition: border 250ms;
+
+
+  &::placeholder {
+    font-size: 15px;
+    line-height: 15px;
+    color: #BBBBBB;
+  }
+
+  &:hover,
+  &:focus {
+    border: 1px solid #5731C6;
+  }
+}
+
+.submit-button {
+  width: 40px;
+  height: 40px;
+
+  padding: 0;
+  margin: 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: transparent;
+  border: 0;
+
+  transition: fill 250ms;
+
+  cursor: pointer;
+
+  &:hover,
+  &:focus {
+    fill: #5731C6;
+  }
+}
+
+
+.example .background {
+  height: 240px;
+  // ❗️❗️❗️ The path to images from a SASS file
+  // is always the same as from the css folder.
+  // background-image: url('../images/logo.png');
+  background-size: cover;
+  background-position: center;
+}

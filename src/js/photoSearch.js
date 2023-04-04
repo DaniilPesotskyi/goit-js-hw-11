@@ -45,9 +45,8 @@ async function fetchAndInsertImages() {
             return;
         }
 
-        if (searchApi.pageNumber === 1) {
-            Notify.success(`Hooray! We found ${data.totalHits} images.`);
-        }
+        Notify.success(`Hooray! We found ${data.hits.length} images.`);
+        
         refs.gallery.insertAdjacentHTML('beforeend', renderCardsMarkup(data.hits))
         gallery.refresh();
     } catch (error) {

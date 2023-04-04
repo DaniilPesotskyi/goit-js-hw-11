@@ -45,10 +45,20 @@ async function fetchAndInsertImages() {
             return;
         }
 
-        Notify.success(`Hooray! We found ${data.hits.length} images.`);
+        if(searchApi.pageNumber === 1) {
+            Notify.success(`Hooray! We found ${data.totalHits} images.`);
+        }
+
+        if(searchApi.pageNumber > 1) {
+            Notify.success(`Hooray! 40 more images uploaded`);
+        }
+
+        searchApi.incrementPage()
+
         
         refs.gallery.insertAdjacentHTML('beforeend', renderCardsMarkup(data.hits))
         gallery.refresh();
+        
     } catch (error) {
         Notify.failure('Ooops, something went wrong...')
         console.log(error)
@@ -83,12 +93,10 @@ function checkPosition() {
   
     if (position >= threshold) {
         fetchAndInsertImages()
-        gallery.refresh();
     }
   }
 
-  (() => {
+(() => {
     window.addEventListener('scroll', throttle(checkPosition, 250))
     window.addEventListener('resize', throttle(checkPosition, 250))
-  })()
-  
+})()

@@ -21,8 +21,4 @@ export default class getElementsAPI {
     set query(newQuery) {
         this.#searchQuery = newQuery
     }
-
-    incrementPage() {
-        this.pageNumber += 1;
-    }
 }

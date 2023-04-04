@@ -22,6 +22,10 @@ function onFormSubmit(e) {
     e.preventDefault()
     // Clear markup
     clearCardsMarkup()
+
+    // Reset page number
+    searchApi.reset()
+
     // Take a search query
     const searchQuery = refs.searchForm.elements.searchQuery.value.trim()
     // Give value to search api query

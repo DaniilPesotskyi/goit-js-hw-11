@@ -29,4 +29,8 @@ export default class getElementsAPI {
     incrementPage() {
         this.#pageNumber += 1
     }
+
+    reset() {
+        this.#pageNumber = 1
+    }
 }

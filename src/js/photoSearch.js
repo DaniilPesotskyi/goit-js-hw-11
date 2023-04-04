@@ -42,6 +42,12 @@ function onFormSubmit(e) {
 async function fetchAndInsertImages() {
     try {
         const data = await searchApi.getImages()
+
+        if (data.totalHits === refs.gallery.children.length) {
+            Notify.warning("We're sorry, but you've reached the end of search results.");
+            return;
+        }
+
         if (data.hits.length === 0) {
             Notify.failure(
                 'Sorry, there are no images matching your search query. Please try again.'
@@ -61,6 +67,7 @@ async function fetchAndInsertImages() {
 
         
         refs.gallery.insertAdjacentHTML('beforeend', renderCardsMarkup(data.hits))
+        
         gallery.refresh();
         
     } catch (error) {
@@ -86,6 +93,7 @@ const gallery = new simpleLightbox(".photo-card a", {
 // Inf scroll 
 
 function checkPosition() {
+
     const height = document.body.offsetHeight
     const screenHeight = window.innerHeight
   

@@ -1,4 +1,7 @@
+import throttle from 'lodash.throttle';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
+import simpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
 import getElemenstApi from './getElements';
 import renderCardsMarkup from './renderMarkup';
 
@@ -12,8 +15,6 @@ const searchApi = new getElemenstApi()
 
 // Add event on form submit
 refs.searchForm.addEventListener('submit', onFormSubmit)
-// Add event listener on image click
-refs.gallery.addEventListener('click', onImageClick)
 
 // Form submit function
 function onFormSubmit(e) {
@@ -48,15 +49,47 @@ async function fetchAndInsertImages() {
             Notify.success(`Hooray! We found ${data.totalHits} images.`);
         }
         refs.gallery.insertAdjacentHTML('beforeend', renderCardsMarkup(data.hits))
+        gallery.refresh();
     } catch (error) {
         Notify.failure('Ooops, something went wrong...')
+        console.log(error)
     }
-}
-
-function onImageClick(e) {
-    console.log(e.target)
 }
 
 function clearCardsMarkup() {
     refs.gallery.innerHTML = '';
 }
+
+const gallery = new simpleLightbox(".photo-card a", {
+	captions: true,
+	captionSelector: "img",
+	captionType: "attr",
+	captionsData: "alt",
+	captionPosition: "bottom",
+	captionDelay: 250,
+});
+
+
+// Inf scroll 
+
+function checkPosition() {
+    const height = document.body.offsetHeight
+    const screenHeight = window.innerHeight
+  
+    const scrolled = window.scrollY
+
+    const threshold = height - screenHeight / 4
+  
+    const position = scrolled + screenHeight
+  
+    if (position >= threshold) {
+        fetchAndInsertImages()
+        gallery.refresh();
+    }
+  }
+
+  (() => {
+    window.addEventListener('scroll', throttle(checkPosition, 250))
+    window.addEventListener('resize', throttle(checkPosition, 250))
+  })()
+  

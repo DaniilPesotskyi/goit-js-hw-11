@@ -13,6 +13,8 @@ const refs = {
 // Init API class
 const searchApi = new getElemenstApi()
 
+let isImageEnd = false;
+
 // Add event on form submit
 refs.searchForm.addEventListener('submit', onFormSubmit)
 
@@ -22,6 +24,8 @@ function onFormSubmit(e) {
     e.preventDefault()
     // Clear markup
     clearCardsMarkup()
+
+    isImageEnd = false;
 
     // Reset page number
     searchApi.reset()
@@ -43,24 +47,27 @@ async function fetchAndInsertImages() {
     try {
         const data = await searchApi.getImages()
 
-        if (data.totalHits === refs.gallery.children.length) {
+        if (data.totalHits === refs.gallery.children.length && isImageEnd === false) {
             Notify.warning("We're sorry, but you've reached the end of search results.");
-            return;
+            isImageEnd = true;
+            return
         }
 
-        if (data.hits.length === 0) {
-            Notify.failure(
-                'Sorry, there are no images matching your search query. Please try again.'
-            );
-            return;
-        }
-
-        if(searchApi.pageNumber === 1) {
-            Notify.success(`Hooray! We found ${data.totalHits} images.`);
-        }
-
-        if(searchApi.pageNumber > 1) {
-            Notify.success(`Hooray! 40 more images uploaded`);
+        if(isImageEnd === false) {
+            if (data.hits.length === 0) {
+                Notify.failure(
+                    'Sorry, there are no images matching your search query. Please try again.'
+                );
+                return;
+            }
+    
+            if(searchApi.pageNumber === 1) {
+                Notify.success(`Hooray! We found ${data.totalHits} images.`);
+            }
+    
+            if(searchApi.pageNumber > 1) {
+                Notify.success(`Hooray! 40 more images uploaded`);
+            }
         }
 
         searchApi.incrementPage()
@@ -69,7 +76,7 @@ async function fetchAndInsertImages() {
         refs.gallery.insertAdjacentHTML('beforeend', renderCardsMarkup(data.hits))
         
         gallery.refresh();
-        
+
     } catch (error) {
         Notify.failure('Ooops, something went wrong...')
         console.log(error)
